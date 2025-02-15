@@ -4,14 +4,21 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
+import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker';
 
 export default function Register() {
+    const [datePickerValue, setDatePickerValue] = useState<DateValueType>({
+        startDate: new Date(),
+        endDate: new Date(),
+    });
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        birth_date: datePickerValue?.startDate?.toISOString().substring(0, 10),
     });
 
     const submit: FormEventHandler = (e) => {
@@ -101,6 +108,32 @@ export default function Register() {
                         message={errors.password_confirmation}
                         className="mt-2"
                     />
+                </div>
+
+                <div className="mt-4">
+                    <InputLabel htmlFor="birth_date" value="Birth Date" />
+
+                    <Datepicker
+                        value={datePickerValue}
+                        onChange={(newValue) => {
+                            if (newValue && newValue.startDate) {
+                                setDatePickerValue(newValue);
+                                setData(
+                                    'birth_date',
+                                    newValue.startDate
+                                        .toISOString()
+                                        .substring(0, 10),
+                                );
+                            }
+                        }}
+                        asSingle={true}
+                        useRange={false}
+                        inputId="birth_date"
+                        inputName="birth_date"
+                        required={true}
+                    />
+
+                    <InputError message={errors.birth_date} className="mt-2" />
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
