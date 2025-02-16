@@ -37,7 +37,7 @@ class PassportController extends Controller
             "created_by" => $request->user()->id
         ]);
 
-        return Redirect::route('passport.view-first-page', ["workflow_id" => $workflow->id()]);
+        return Redirect::route('passport.first-page.view', ["workflow_id" => $workflow->id()]);
     }
 
     public function viewFirstPageForm(Request $request, string $workflow_id): Response {
@@ -47,7 +47,16 @@ class PassportController extends Controller
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
         }
 
-        return Inertia::render('Passport/FirstPage');
+        return Inertia::render('Passport/FirstPage')->with("workflow_id", $workflow_id);
+    }
+
+    public function submitFirstPageForm(Request $request, string $workflow_id): RedirectResponse {
+        $request->validate([
+            'identity_card' => 'required|image',
+            'old_passport' => 'image'
+        ]);
+
+        return Redirect::route("dashboard");
     }
 
     private static $status_map = [

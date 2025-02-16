@@ -1,13 +1,34 @@
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { JSX } from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import { FormEventHandler, JSX } from 'react';
 
-export default function FirstPage(): JSX.Element {
+type FormProps = {
+    identity_card: File | null;
+    old_passport: File | null;
+};
+
+export default function FirstPage(props: { workflow_id: string }): JSX.Element {
+    const { setData, post, processing } = useForm<FormProps>({
+        identity_card: null,
+        old_passport: null,
+    });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(
+            route('passport.first-page.submit', {
+                workflow_id: props.workflow_id,
+            }),
+        );
+    };
+
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Passport Application - First Page
+                    Passport Application #{props.workflow_id} - First Page
                 </h2>
             }
         >
@@ -16,7 +37,62 @@ export default function FirstPage(): JSX.Element {
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100"></div>
+                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                            <form onSubmit={submit}>
+                                <div>
+                                    <InputLabel
+                                        htmlFor="identity_card"
+                                        value="Identity Card (KTP)"
+                                    />
+
+                                    <input
+                                        className="mt-1 block w-full"
+                                        type="file"
+                                        id="identity_card"
+                                        name="identity_card"
+                                        onChange={(e) => {
+                                            if (e.target.files) {
+                                                setData(
+                                                    'identity_card',
+                                                    e.target.files[0],
+                                                );
+                                            }
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="mt-5">
+                                    <InputLabel
+                                        htmlFor="old_passport"
+                                        value="Old Passport"
+                                    />
+
+                                    <input
+                                        className="mt-1 block w-full"
+                                        type="file"
+                                        id="old_passport"
+                                        name="old_passport"
+                                        onChange={(e) => {
+                                            if (e.target.files) {
+                                                setData(
+                                                    'old_passport',
+                                                    e.target.files[0],
+                                                );
+                                            }
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="mt-6">
+                                    <PrimaryButton
+                                        disabled={processing}
+                                        type="submit"
+                                    >
+                                        Submit
+                                    </PrimaryButton>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
