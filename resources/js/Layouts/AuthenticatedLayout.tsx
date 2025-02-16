@@ -21,7 +21,7 @@ export default function Authenticated({
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
-                                    <img src="logo.png" width="30" />
+                                    <img src="/logo.png" width="30" />
                                 </Link>
                             </div>
 
