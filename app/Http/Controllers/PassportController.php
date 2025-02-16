@@ -8,6 +8,7 @@ use App\Workflows\ApplyPassportWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\PassportApplication;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -55,6 +56,21 @@ class PassportController extends Controller
             'identity_card' => 'required|image',
             'old_passport' => 'image'
         ]);
+
+        $workflow = WorkflowStub::load($workflow_id);
+
+        $identity_card_path = "workflows/".$workflow_id."/identity_image";
+        Storage::put($identity_card_path, $request->identity_card);
+        $workflow->setIdentityCardPath($identity_card_path);
+
+        $old_passport_path = "";
+        if ($request->old_passport) {
+            $old_passport_path = "workflows/".$workflow_id."/old_passport";
+            Storage::put($old_passport_path, $request->old_passport);
+            $workflow->setOldPassportPath($old_passport_path);
+        }
+
+        $workflow->setAsCompleted();
 
         return Redirect::route("dashboard");
     }
