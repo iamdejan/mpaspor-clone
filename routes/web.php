@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [PassportController::class, 'index'])->name('dashboard');
     Route::get('/passport/apply', [PassportController::class, 'createApplyRequest'])->name('passport.apply');
+    Route::get('/passport/{workflow_id}/first-page', [PassportController::class, 'viewFirstPageForm'])->name('passport.view-first-page');
 });
 
 require __DIR__.'/auth.php';

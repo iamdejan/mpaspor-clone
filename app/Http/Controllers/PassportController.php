@@ -31,14 +31,23 @@ class PassportController extends Controller
     public function createApplyRequest(Request $request): RedirectResponse {
         $workflow = WorkflowStub::make(ApplyPassportWorkflow::class);
         $workflow->start();
-        $workflow->complete();
 
         PassportApplication::create([
             "workflow_id" => $workflow->id(),
             "created_by" => $request->user()->id
         ]);
 
-        return Redirect::route('dashboard');
+        return Redirect::route('passport.view-first-page', ["workflow_id" => $workflow->id()]);
+    }
+
+    public function viewFirstPageForm(Request $request, string $workflow_id): Response {
+        PassportApplication::where("workflow_id", $workflow_id)->firstOrFail();
+        $workflow = WorkflowStub::load($workflow_id);
+        if (!$workflow->running()) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+        }
+
+        return Inertia::render('Passport/FirstPage');
     }
 
     private static $status_map = [

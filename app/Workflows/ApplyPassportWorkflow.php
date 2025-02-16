@@ -3,14 +3,14 @@
 namespace App\Workflows;
 
 use Workflow\Workflow;
-use Workflow\ActivityStub;
+use Workflow\WorkflowStub;
 
 class ApplyPassportWorkflow extends Workflow
 {
+    private bool $completed = false;
+
     public function execute()
     {
-        $result = yield ActivityStub::make(HelloWorldActivity::class);
-
-        return $result;
+        yield WorkflowStub::await(fn () => $this->completed);
     }
 }
