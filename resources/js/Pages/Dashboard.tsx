@@ -2,7 +2,16 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Dashboard() {
+type PassportApplication = {
+    workflow_id: string;
+    status: string;
+};
+
+type Props = {
+    passport_applications: PassportApplication[];
+};
+
+export default function Dashboard(props: Props) {
     return (
         <AuthenticatedLayout
             header={
@@ -17,7 +26,32 @@ export default function Dashboard() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            You're logged in!
+                            <table className="table-auto border-collapse border border-gray-400">
+                                <thead>
+                                    <tr>
+                                        <th className="border border-gray-300 p-2">
+                                            Workflow ID
+                                        </th>
+                                        <th className="border border-gray-300 p-2">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {props.passport_applications.map(
+                                        (entry) => (
+                                            <tr key={entry.workflow_id}>
+                                                <td className="border border-gray-300 p-2">
+                                                    {entry.workflow_id}
+                                                </td>
+                                                <td className="border border-gray-300 p-2">
+                                                    {entry.status}
+                                                </td>
+                                            </tr>
+                                        ),
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                         <div className="p-6">
                             <Link href={route('passport.apply')}>
