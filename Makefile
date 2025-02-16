@@ -2,12 +2,16 @@
 start:
 	pnpm run build
 	./vendor/bin/sail up -d
-	./vendor/bin/sail artisan inertia:start-ssr
+	./vendor/bin/sail artisan inertia:start-ssr &
 
-.PHONY: start-ssr
-start-ssr:
+.PHONY: start/ssr
+start/ssr:
 	pnpm run build
 	./vendor/bin/sail artisan inertia:start-ssr
+
+.PHONY: start/queue
+start/queue: start
+	./vendor/bin/sail artisan queue:work &
 
 .PHONY: stop
 stop:
