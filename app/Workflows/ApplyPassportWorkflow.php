@@ -3,6 +3,7 @@
 namespace App\Workflows;
 
 use Workflow\Workflow;
+use Workflow\ActivityStub;
 
 class ApplyPassportWorkflow extends Workflow
 {

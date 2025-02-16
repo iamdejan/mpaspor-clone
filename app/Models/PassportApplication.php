@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class PassportApplication extends Model
 {
     use HasUlids;
+
+    protected $fillable = [
+        "workflow_id",
+        "created_by"
+    ];
 }

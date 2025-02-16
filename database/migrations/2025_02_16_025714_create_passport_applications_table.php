@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('passport_applications', function (Blueprint $table) {
             $table->ulid('id')->primary();
-
+            $table->unsignedBigInteger('workflow_id');
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
