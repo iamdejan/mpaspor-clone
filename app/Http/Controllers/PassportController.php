@@ -8,6 +8,7 @@ use App\Workflows\ApplyPassportWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\PassportApplication;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -70,9 +71,34 @@ class PassportController extends Controller
             $workflow->setOldPassportPath($old_passport_path);
         }
 
-        $workflow->setAsCompleted();
+        return Redirect::route("passport.second-page.view", ["workflow_id" => $workflow_id]);
+    }
 
-        return Redirect::route("dashboard");
+    public function viewSecondPageForm(Request $request, string $workflow_id): Response {
+        PassportApplication::where("workflow_id", $workflow_id)->firstOrFail();
+        $workflow = WorkflowStub::load($workflow_id);
+        if (!$workflow->running()) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+        }
+
+        // TODO dejan: get Indonesian administrative codes
+        // - data source: https://github.com/emsifa/api-wilayah-indonesia
+        // - method: https://laravel.com/docs/11.x/http-client
+
+        $provinces = [];
+        $province_response = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json");
+        $json = (array) $province_response->json();
+        $len = count($json);
+        for ($i=0; $i < $len; $i++) {
+            array_push($provinces, [
+                "code" => $json[$i]['id'],
+                "name" => $json[$i]['name'],
+            ]);
+        }
+
+        return Inertia::render('Passport/SecondPage')
+            ->with("workflow_id", $workflow_id)
+            ->with("provinces", $provinces);
     }
 
     private static $status_map = [
