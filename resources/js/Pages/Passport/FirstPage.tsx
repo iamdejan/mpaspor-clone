@@ -1,3 +1,4 @@
+import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -10,7 +11,7 @@ type FormProps = {
 };
 
 export default function FirstPage(props: { workflow_id: string }): JSX.Element {
-    const { setData, post, processing } = useForm<FormProps>({
+    const { setData, post, processing, errors } = useForm<FormProps>({
         identity_card: null,
         old_passport: null,
     });
@@ -32,7 +33,7 @@ export default function FirstPage(props: { workflow_id: string }): JSX.Element {
                 </h2>
             }
         >
-            <Head title="Passport Application - First Page" />
+            <Head title="First Page" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -59,6 +60,11 @@ export default function FirstPage(props: { workflow_id: string }): JSX.Element {
                                             }
                                         }}
                                     />
+
+                                    <InputError
+                                        message={errors.identity_card}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-5">
@@ -80,6 +86,11 @@ export default function FirstPage(props: { workflow_id: string }): JSX.Element {
                                                 );
                                             }
                                         }}
+                                    />
+
+                                    <InputError
+                                        message={errors.old_passport}
+                                        className="mt-2"
                                     />
                                 </div>
 

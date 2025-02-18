@@ -54,7 +54,7 @@ class PassportController extends Controller
     public function submitFirstPageForm(Request $request, string $workflow_id): RedirectResponse {
         $request->validate([
             'identity_card' => 'required|image',
-            'old_passport' => 'image'
+            'old_passport' => 'nullable|image'
         ]);
 
         $workflow = WorkflowStub::load($workflow_id);

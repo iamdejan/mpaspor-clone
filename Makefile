@@ -1,6 +1,9 @@
-.PHONY: start
-start:
+.PHONY: build
+build:
 	pnpm run build
+
+.PHONY: start
+start: build
 	./vendor/bin/sail up -d
 
 .PHONY: stop
