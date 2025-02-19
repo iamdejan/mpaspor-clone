@@ -6,14 +6,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { JSX } from 'react';
 
-type ProvinceData = {
+type AdministrativeData = {
     code: string;
     name: string;
 };
 
 type Props = {
     workflow_id: string;
-    provinces: ProvinceData[];
+    provinces: AdministrativeData[];
 };
 
 type FormProps = {
@@ -91,10 +91,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                     <select
                                         id="province"
                                         name="province"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                                     >
                                         {props.provinces.map((entry) => (
-                                            <option key={entry.code} value={entry.code}>
+                                            <option
+                                                key={entry.code}
+                                                value={entry.code}
+                                            >
                                                 {entry.name}
                                             </option>
                                         ))}

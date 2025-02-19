@@ -81,10 +81,6 @@ class PassportController extends Controller
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
         }
 
-        // TODO dejan: get Indonesian administrative codes
-        // - data source: https://github.com/emsifa/api-wilayah-indonesia
-        // - method: https://laravel.com/docs/11.x/http-client
-
         $provinces = [];
         $province_response = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json");
         $json = (array) $province_response->json();
