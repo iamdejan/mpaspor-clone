@@ -81,20 +81,8 @@ class PassportController extends Controller
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
         }
 
-        $provinces = [];
-        $province_response = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json");
-        $json = (array) $province_response->json();
-        $len = count($json);
-        for ($i=0; $i < $len; $i++) {
-            array_push($provinces, [
-                "code" => $json[$i]['id'],
-                "name" => $json[$i]['name'],
-            ]);
-        }
-
         return Inertia::render('Passport/SecondPage')
-            ->with("workflow_id", $workflow_id)
-            ->with("provinces", $provinces);
+            ->with("workflow_id", $workflow_id);
     }
 
     private static $status_map = [
