@@ -126,7 +126,6 @@ export default function FirstPage(props: Props): JSX.Element {
                                         name="street_address"
                                         value={data.street_address}
                                         className="mt-1 block w-full"
-                                        autoComplete="username"
                                         isFocused={true}
                                         onChange={(e) =>
                                             setData(
@@ -140,6 +139,47 @@ export default function FirstPage(props: Props): JSX.Element {
                                         message={errors.street_address}
                                         className="mt-2"
                                     />
+                                </div>
+
+                                <div className="mt-4 grid grid-cols-2">
+                                    <div className="mr-2">
+                                        <InputLabel htmlFor="rt" value="RT" />
+
+                                        <TextInput
+                                            type="text"
+                                            id="rt"
+                                            name="rt"
+                                            value={data.rt}
+                                            className="mt-1 block w-full"
+                                            onChange={(e) =>
+                                                setData('rt', e.target.value)
+                                            }
+                                        />
+
+                                        <InputError
+                                            message={errors.rt}
+                                            className="mt-2"
+                                        />
+                                    </div>
+                                    <div className="ml-2">
+                                        <InputLabel htmlFor="rw" value="RW" />
+
+                                        <TextInput
+                                            type="text"
+                                            id="rw"
+                                            name="rw"
+                                            value={data.rw}
+                                            className="mt-1 block w-full"
+                                            onChange={(e) =>
+                                                setData('rw', e.target.value)
+                                            }
+                                        />
+
+                                        <InputError
+                                            message={errors.rw}
+                                            className="mt-2"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="mt-4">
