@@ -152,9 +152,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         id="province"
                                         name="province"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                        onChange={(e) =>
-                                            setProvince(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setProvince(e.target.value);
+                                            setData(
+                                                'province_code',
+                                                e.target.value,
+                                            );
+                                        }}
                                         disabled={provincesQuery.isLoading}
                                     >
                                         <option value=""></option>
@@ -180,9 +184,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         id="city"
                                         name="city"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                        onChange={(e) =>
-                                            setCity(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setCity(e.target.value);
+                                            setData(
+                                                'city_code',
+                                                e.target.value,
+                                            );
+                                        }}
                                         disabled={citiesQuery.isLoading}
                                     >
                                         <option value=""></option>
@@ -211,9 +219,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         id="district"
                                         name="district"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                        onChange={(e) =>
-                                            setDistrict(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setDistrict(e.target.value);
+                                            setData(
+                                                'sub_district_code',
+                                                e.target.value,
+                                            );
+                                        }}
                                         disabled={districtsQuery.isLoading}
                                     >
                                         <option value=""></option>
@@ -242,9 +254,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         id="sub-district"
                                         name="sub-district"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                        onChange={(e) =>
-                                            setSubDistrict(e.target.value)
-                                        }
+                                        onChange={(e) => {
+                                            setSubDistrict(e.target.value);
+                                            setData(
+                                                'sub_district_code',
+                                                e.target.value,
+                                            );
+                                        }}
                                         disabled={subDistrictsQuery.isLoading}
                                     >
                                         <option value=""></option>
