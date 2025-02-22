@@ -48,10 +48,10 @@ export default function FirstPage(props: Props): JSX.Element {
                 .json();
         },
     });
-    const [province, setProvince] = useState<string>('11'); // default code is set to Aceh
+    const [province, setProvince] = useState<string>('');
 
     const citiesQuery = useQuery<AdministrativeData[]>({
-        queryKey: ['province', province, 'cities'],
+        queryKey: ['provinces', province, 'cities'],
         queryFn: async function (): Promise<AdministrativeData[]> {
             return await ky
                 .get<
@@ -61,6 +61,41 @@ export default function FirstPage(props: Props): JSX.Element {
         },
         enabled: province !== '',
     });
+    const [city, setCity] = useState<string>('');
+
+    const districtsQuery = useQuery<AdministrativeData[]>({
+        queryKey: ['provinces', province, 'cities', city, 'districts'],
+        queryFn: async function (): Promise<AdministrativeData[]> {
+            return await ky
+                .get<
+                    AdministrativeData[]
+                >(`https://www.emsifa.com/api-wilayah-indonesia/api/districts/${city}.json`)
+                .json();
+        },
+        enabled: city !== '',
+    });
+    const [district, setDistrict] = useState<string>('');
+
+    const subDistrictsQuery = useQuery<AdministrativeData[]>({
+        queryKey: [
+            'provinces',
+            province,
+            'cities',
+            city,
+            'districts',
+            district,
+            'sub-districts',
+        ],
+        queryFn: async function (): Promise<AdministrativeData[]> {
+            return await ky
+                .get<
+                    AdministrativeData[]
+                >(`https://www.emsifa.com/api-wilayah-indonesia/api/villages/${district}.json`)
+                .json();
+        },
+        enabled: district !== '',
+    });
+    const [, setSubDistrict] = useState<string>('');
 
     return (
         <AuthenticatedLayout
@@ -122,6 +157,7 @@ export default function FirstPage(props: Props): JSX.Element {
                                         }
                                         disabled={provincesQuery.isLoading}
                                     >
+                                        <option value=""></option>
                                         {provincesQuery.isSuccess ? (
                                             provincesQuery.data.map((entry) => (
                                                 <option
@@ -144,8 +180,12 @@ export default function FirstPage(props: Props): JSX.Element {
                                         id="city"
                                         name="city"
                                         className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                        onChange={(e) =>
+                                            setCity(e.target.value)
+                                        }
                                         disabled={citiesQuery.isLoading}
                                     >
+                                        <option value=""></option>
                                         {citiesQuery.isSuccess ? (
                                             citiesQuery.data.map((entry) => (
                                                 <option
@@ -155,6 +195,70 @@ export default function FirstPage(props: Props): JSX.Element {
                                                     {entry.name}
                                                 </option>
                                             ))
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </select>
+                                </div>
+
+                                <div className="mt-4">
+                                    <InputLabel
+                                        htmlFor="district"
+                                        value="District"
+                                    />
+
+                                    <select
+                                        id="district"
+                                        name="district"
+                                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                        onChange={(e) =>
+                                            setDistrict(e.target.value)
+                                        }
+                                        disabled={districtsQuery.isLoading}
+                                    >
+                                        <option value=""></option>
+                                        {districtsQuery.isSuccess ? (
+                                            districtsQuery.data.map((entry) => (
+                                                <option
+                                                    key={entry.id}
+                                                    value={entry.id}
+                                                >
+                                                    {entry.name}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </select>
+                                </div>
+
+                                <div className="mt-4">
+                                    <InputLabel
+                                        htmlFor="sub-district"
+                                        value="Sub-District"
+                                    />
+
+                                    <select
+                                        id="sub-district"
+                                        name="sub-district"
+                                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                        onChange={(e) =>
+                                            setSubDistrict(e.target.value)
+                                        }
+                                        disabled={subDistrictsQuery.isLoading}
+                                    >
+                                        <option value=""></option>
+                                        {subDistrictsQuery.isSuccess ? (
+                                            subDistrictsQuery.data.map(
+                                                (entry) => (
+                                                    <option
+                                                        key={entry.id}
+                                                        value={entry.id}
+                                                    >
+                                                        {entry.name}
+                                                    </option>
+                                                ),
+                                            )
                                         ) : (
                                             <></>
                                         )}
