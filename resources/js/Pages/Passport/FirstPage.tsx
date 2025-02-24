@@ -5,12 +5,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler, JSX } from 'react';
 
+type Props = {
+    workflow_id: string;
+};
+
 type FormProps = {
     identity_card: File | null;
     old_passport: File | null;
 };
 
-export default function FirstPage(props: { workflow_id: string }): JSX.Element {
+export default function FirstPage(props: Props): JSX.Element {
     const { setData, post, processing, errors } = useForm<FormProps>({
         identity_card: null,
         old_passport: null,
@@ -99,7 +103,7 @@ export default function FirstPage(props: { workflow_id: string }): JSX.Element {
                                         disabled={processing}
                                         type="submit"
                                     >
-                                        Submit
+                                        Next
                                     </PrimaryButton>
                                 </div>
                             </form>

@@ -25,7 +25,7 @@ export default function Dashboard(props: Props) {
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                        <div className="border border-gray-100 p-6 text-gray-900 dark:text-gray-100">
                             <table className="table-auto border-collapse border border-gray-400">
                                 <thead>
                                     <tr>
@@ -42,7 +42,17 @@ export default function Dashboard(props: Props) {
                                         (entry) => (
                                             <tr key={entry.workflow_id}>
                                                 <td className="border border-gray-300 p-2">
-                                                    {entry.workflow_id}
+                                                    <Link
+                                                        href={route(
+                                                            'passport.first-page.view',
+                                                            {
+                                                                workflow_id:
+                                                                    entry.workflow_id,
+                                                            },
+                                                        )}
+                                                    >
+                                                        {entry.workflow_id}
+                                                    </Link>
                                                 </td>
                                                 <td className="border border-gray-300 p-2">
                                                     {entry.status}

@@ -8,6 +8,7 @@ use App\Workflows\ApplyPassportWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\PassportApplication;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -70,9 +71,18 @@ class PassportController extends Controller
             $workflow->setOldPassportPath($old_passport_path);
         }
 
-        $workflow->setAsCompleted();
+        return Redirect::route("passport.second-page.view", ["workflow_id" => $workflow_id]);
+    }
 
-        return Redirect::route("dashboard");
+    public function viewSecondPageForm(Request $request, string $workflow_id): Response {
+        PassportApplication::where("workflow_id", $workflow_id)->firstOrFail();
+        $workflow = WorkflowStub::load($workflow_id);
+        if (!$workflow->running()) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
+        }
+
+        return Inertia::render('Passport/SecondPage')
+            ->with("workflow_id", $workflow_id);
     }
 
     private static $status_map = [

@@ -22,8 +22,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [PassportController::class, 'index'])->name('dashboard');
     Route::get('/passport/apply', [PassportController::class, 'createApplyRequest'])->name('passport.apply');
+
+    // first page
     Route::get('/passport/{workflow_id}/first-page', [PassportController::class, 'viewFirstPageForm'])->name('passport.first-page.view');
     Route::post('/passport/{workflow_id}/first-page', [PassportController::class, 'submitFirstPageForm'])->name('passport.first-page.submit');
+
+    // second page
+    Route::get('/passport/{workflow_id}/second-page', [PassportController::class, 'viewSecondPageForm'])->name('passport.second-page.view');
 });
 
 require __DIR__.'/auth.php';
