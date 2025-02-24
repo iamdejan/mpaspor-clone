@@ -1,3 +1,4 @@
+import { Page } from '@inertiajs/core';
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
@@ -8,7 +9,7 @@ import { PageProps } from './types';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-createServer((page) =>
+createServer((page: Page<PageProps>) =>
     createInertiaApp({
         page,
         render: ReactDOMServer.renderToString,
@@ -23,8 +24,8 @@ createServer((page) =>
             // @ts-expect-error
             global.route<RouteName> = (name, params, absolute) =>
                 route(name, params as any, absolute, {
-                    ...(page.props.ziggy as PageProps['ziggy']),
-                    location: new URL((page.props.ziggy as PageProps['ziggy']).url || (page.props.ziggy as PageProps['ziggy']).location),
+                    ...page.props.ziggy,
+                    location: new URL(page.props.ziggy.url || page.props.ziggy.location),
                 });
             /* eslint-enable */
 
