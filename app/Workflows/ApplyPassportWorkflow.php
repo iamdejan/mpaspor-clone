@@ -8,7 +8,7 @@ use Workflow\WorkflowStub;
 
 class ApplyPassportWorkflow extends Workflow
 {
-    private static array $valid_inputs = [
+    const array valid_inputs = [
         "identity_card_path",
         "old_passport_path",
         "street_address",
@@ -34,7 +34,7 @@ class ApplyPassportWorkflow extends Workflow
     #[SignalMethod]
     public function setInput(string $field_name, string $data): void
     {
-        if (!in_array($field_name, self::$valid_inputs)) {
+        if (!in_array($field_name, self::valid_inputs)) {
             throw new \Exception("Invalid input field name");
         }
 
