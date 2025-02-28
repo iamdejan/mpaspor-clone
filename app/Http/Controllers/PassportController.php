@@ -101,13 +101,13 @@ class PassportController extends Controller
     {
         $workflow = WorkflowStub::load($workflow_id);
 
-        if ($request->has("identity_card")) {
+        if ($request->identity_card) {
             $identity_card_path = "workflows/" . $workflow_id . "/identity_image";
             Storage::put($identity_card_path, $request->identity_card);
             $workflow->setInput("identity_card_path", $identity_card_path);
         }
 
-        if ($request->has("old_passport")) {
+        if ($request->old_passport) {
             $old_passport_path = "workflows/" . $workflow_id . "/old_passport";
             Storage::put($old_passport_path, $request->old_passport);
             $workflow->setInput("old_passport_path", $old_passport_path);
@@ -118,31 +118,31 @@ class PassportController extends Controller
     {
         $workflow = WorkflowStub::load($workflow_id);
 
-        if ($request->has("street_address")) {
+        if ($request->street_address) {
             $workflow->setInput("street_address", $request->street_address);
         }
 
-        if ($request->has("rt")) {
+        if ($request->rt) {
             $workflow->setInput("rt", $request->rt);
         }
 
-        if ($request->has("rw")) {
+        if ($request->rw) {
             $workflow->setInput("rw", $request->rw);
         }
 
-        if ($request->has("sub_district_code")) {
+        if ($request->sub_district_code) {
             $workflow->setInput("sub_district_code", $request->sub_district_code);
         }
 
-        if ($request->has("district_code")) {
+        if ($request->district_code) {
             $workflow->setInput("district_code", $request->district_code);
         }
 
-        if ($request->has("city_code")) {
+        if ($request->city_code) {
             $workflow->setInput("city_code", $request->city_code);
         }
 
-        if ($request->has("province_code")) {
+        if ($request->province_code) {
             $workflow->setInput("province_code", $request->province_code);
         }
     }

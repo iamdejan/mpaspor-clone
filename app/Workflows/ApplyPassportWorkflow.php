@@ -32,13 +32,15 @@ class ApplyPassportWorkflow extends Workflow
     }
 
     #[SignalMethod]
-    public function setInput(string $field_name, string $data): void
+    public function setInput(string $field_name, string $data)
     {
         if (!in_array($field_name, self::valid_inputs)) {
             throw new \Exception("Invalid input field name");
         }
 
         $this->input_data[$field_name] = $data;
+
+        return $this->input_data;
     }
 
     #[SignalMethod]

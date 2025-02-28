@@ -6,7 +6,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
 import ky from 'ky';
-import { JSX, useState } from 'react';
+import { FormEventHandler, JSX, useState } from 'react';
 
 type AdministrativeData = {
     id: string;
@@ -27,8 +27,8 @@ type FormProps = {
     province_code: string;
 };
 
-export default function FirstPage(props: Props): JSX.Element {
-    const { data, setData, processing, errors } = useForm<FormProps>({
+export default function SecondPage(props: Props): JSX.Element {
+    const { data, setData, post, processing, errors } = useForm<FormProps>({
         street_address: '',
         rt: '',
         rw: '',
@@ -37,6 +37,15 @@ export default function FirstPage(props: Props): JSX.Element {
         city_code: '',
         province_code: '',
     });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(
+            route('passport.second-page.submit', {
+                workflow_id: props.workflow_id,
+            }),
+        );
+    };
 
     const provincesQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces'],
@@ -111,7 +120,7 @@ export default function FirstPage(props: Props): JSX.Element {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <form>
+                            <form onSubmit={submit}>
                                 <h3>Domicile Address</h3>
 
                                 <div className="mt-4">
