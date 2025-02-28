@@ -7,6 +7,8 @@ import { FormEventHandler, JSX } from 'react';
 
 type Props = {
     workflow_id: string;
+    identity_card_path: string | null;
+    old_passport_path: string | null;
 };
 
 type FormProps = {
@@ -57,6 +59,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         value="Identity Card (KTP)"
                                     />
 
+                                    {props.identity_card_path && (
+                                        <img
+                                            src={props.identity_card_path}
+                                            width={60}
+                                        />
+                                    )}
+
                                     <input
                                         className="mt-1 block w-full"
                                         type="file"
@@ -83,6 +92,13 @@ export default function FirstPage(props: Props): JSX.Element {
                                         htmlFor="old_passport"
                                         value="Old Passport"
                                     />
+
+                                    {props.old_passport_path && (
+                                        <img
+                                            src={props.old_passport_path}
+                                            width={60}
+                                        />
+                                    )}
 
                                     <input
                                         className="mt-1 block w-full"

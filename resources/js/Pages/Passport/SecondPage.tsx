@@ -1,9 +1,10 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
 import ky from 'ky';
 import { FormEventHandler, JSX, useState } from 'react';
@@ -350,13 +351,33 @@ export default function SecondPage(props: Props): JSX.Element {
                                     />
                                 </div>
 
-                                <div className="mt-6">
-                                    <PrimaryButton
-                                        disabled={processing}
-                                        type="submit"
-                                    >
-                                        Submit
-                                    </PrimaryButton>
+                                <div className="mt-6 grid grid-cols-2">
+                                    <div>
+                                        <Link
+                                            href={route(
+                                                'passport.first-page.view',
+                                                {
+                                                    workflow_id:
+                                                        props.workflow_id,
+                                                },
+                                            )}
+                                        >
+                                            <SecondaryButton
+                                                disabled={processing}
+                                                type="button"
+                                            >
+                                                Go Back
+                                            </SecondaryButton>
+                                        </Link>
+                                    </div>
+                                    <div className="ml-auto mr-0">
+                                        <PrimaryButton
+                                            disabled={processing}
+                                            type="submit"
+                                        >
+                                            Submit
+                                        </PrimaryButton>
+                                    </div>
                                 </div>
                             </form>
                         </div>

@@ -52,7 +52,13 @@ class PassportController extends Controller
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
         }
 
-        return Inertia::render('Passport/FirstPage')->with("workflow_id", $workflow_id);
+        $input_data = $workflow->getInputData();
+        $identity_card_path = array_key_exists("identity_card_path", $input_data) ? Storage::url($input_data["identity_card_path"]) : null;
+        $old_passport_path = array_key_exists("old_passport_path", $input_data) ? Storage::url($input_data["old_passport_path"]) : null;
+
+        return Inertia::render('Passport/FirstPage')->with("workflow_id", $workflow_id)
+            ->with("identity_card_path", $identity_card_path)
+            ->with("old_passport_path", $old_passport_path);
     }
 
     public function submitFirstPageForm(Request $request, string $workflow_id): RedirectResponse
@@ -124,15 +130,15 @@ class PassportController extends Controller
         $workflow = WorkflowStub::load($workflow_id);
 
         if ($request->identity_card) {
-            $identity_card_path = "workflows/" . $workflow_id . "/identity_image";
-            Storage::put($identity_card_path, $request->identity_card);
-            $workflow->setInput("identity_card_path", $identity_card_path);
+            $identity_card_path = "workflows/" . $workflow_id;
+            Storage::putFileAs($identity_card_path, $request->identity_card, "identity_card.jpg");
+            $workflow->setInput("identity_card_path", $identity_card_path . "/identity_card.jpg");
         }
 
         if ($request->old_passport) {
-            $old_passport_path = "workflows/" . $workflow_id . "/old_passport";
-            Storage::put($old_passport_path, $request->old_passport);
-            $workflow->setInput("old_passport_path", $old_passport_path);
+            $old_passport_path = "workflows/" . $workflow_id;
+            Storage::putFileAs($old_passport_path, $request->old_passport, "old_passport.jpg");
+            $workflow->setInput("old_passport_path", $old_passport_path . "/old_passport.jpg");
         }
     }
 
