@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\PassportApplication;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -58,6 +59,14 @@ class PassportController extends Controller
     {
         $this->saveFirstPageForm($request, $workflow_id);
 
+        $workflow = WorkflowStub::load($workflow_id);
+        $input_data = $workflow->getInputData();
+        $validator = Validator::make($input_data, [
+            "identity_card_path" => "required",
+            "old_passport_path" => "nullable",
+        ]);
+        $validator->validate();
+
         return Redirect::route("passport.second-page.view", ["workflow_id" => $workflow_id]);
     }
 
@@ -78,6 +87,19 @@ class PassportController extends Controller
         $this->saveSecondPageForm($request, $workflow_id);
 
         $workflow = WorkflowStub::load($workflow_id);
+
+        $input_data = $workflow->getInputData();
+        $validator = Validator::make($input_data, [
+            "street_address" => "required",
+            "rt" => "required",
+            "rw" => "required",
+            "sub_district_code" => "required",
+            "district_code" => "required",
+            "city_code" => "required",
+            "province_code" => "required"
+        ]);
+        $validator->validate();
+
         $workflow->setAsCompleted();
 
         return Redirect::route("dashboard");

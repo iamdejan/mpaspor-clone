@@ -2,6 +2,7 @@
 
 namespace App\Workflows;
 
+use Workflow\QueryMethod;
 use Workflow\SignalMethod;
 use Workflow\Workflow;
 use Workflow\WorkflowStub;
@@ -47,5 +48,11 @@ class ApplyPassportWorkflow extends Workflow
     public function setAsCompleted(): void
     {
         $this->completed = true;
+    }
+
+    #[QueryMethod]
+    public function getInputData(): array
+    {
+        return $this->input_data;
     }
 }

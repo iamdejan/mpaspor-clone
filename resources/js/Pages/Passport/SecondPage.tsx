@@ -224,6 +224,11 @@ export default function SecondPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.province_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -256,6 +261,11 @@ export default function SecondPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.city_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -271,7 +281,7 @@ export default function SecondPage(props: Props): JSX.Element {
                                         onChange={(e) => {
                                             setDistrict(e.target.value);
                                             setData(
-                                                'sub_district_code',
+                                                'district_code',
                                                 e.target.value,
                                             );
                                         }}
@@ -291,6 +301,11 @@ export default function SecondPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.district_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -328,6 +343,11 @@ export default function SecondPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.sub_district_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-6">

@@ -12,12 +12,19 @@ type Props = {
 type FormProps = {
     identity_card: File | null;
     old_passport: File | null;
+
+    // for error message only
+    identity_card_path: string | null;
+    old_passport_path: string | null;
 };
 
 export default function FirstPage(props: Props): JSX.Element {
     const { setData, post, processing, errors } = useForm<FormProps>({
         identity_card: null,
         old_passport: null,
+        //
+        identity_card_path: null,
+        old_passport_path: null,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -66,7 +73,7 @@ export default function FirstPage(props: Props): JSX.Element {
                                     />
 
                                     <InputError
-                                        message={errors.identity_card}
+                                        message={errors.identity_card_path}
                                         className="mt-2"
                                     />
                                 </div>
@@ -93,7 +100,7 @@ export default function FirstPage(props: Props): JSX.Element {
                                     />
 
                                     <InputError
-                                        message={errors.old_passport}
+                                        message={errors.old_passport_path}
                                         className="mt-2"
                                     />
                                 </div>
