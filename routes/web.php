@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
     // second page
     Route::get('/passport/{workflow_id}/second-page', [PassportController::class, 'viewSecondPageForm'])->name('passport.second-page.view');
+    Route::post('/passport/{workflow_id}/second-page', [PassportController::class, 'submitSecondPageForm'])->name('passport.second-page.submit');
 });
 
 require __DIR__.'/auth.php';

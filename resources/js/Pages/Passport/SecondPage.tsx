@@ -1,12 +1,13 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useQuery } from '@tanstack/react-query';
 import ky from 'ky';
-import { JSX, useState } from 'react';
+import { FormEventHandler, JSX, useState } from 'react';
 
 type AdministrativeData = {
     id: string;
@@ -15,6 +16,13 @@ type AdministrativeData = {
 
 type Props = {
     workflow_id: string;
+    street_address: string;
+    rt: string;
+    rw: string;
+    sub_district_code: string;
+    district_code: string;
+    city_code: string;
+    province_code: string;
 };
 
 type FormProps = {
@@ -27,16 +35,25 @@ type FormProps = {
     province_code: string;
 };
 
-export default function FirstPage(props: Props): JSX.Element {
-    const { data, setData, processing, errors } = useForm<FormProps>({
-        street_address: '',
-        rt: '',
-        rw: '',
-        sub_district_code: '',
-        district_code: '',
-        city_code: '',
-        province_code: '',
+export default function SecondPage(props: Props): JSX.Element {
+    const { data, setData, post, processing, errors } = useForm<FormProps>({
+        street_address: props.street_address,
+        rt: props.rt,
+        rw: props.rw,
+        sub_district_code: props.sub_district_code,
+        district_code: props.district_code,
+        city_code: props.city_code,
+        province_code: props.province_code,
     });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+        post(
+            route('passport.second-page.submit', {
+                workflow_id: props.workflow_id,
+            }),
+        );
+    };
 
     const provincesQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces'],
@@ -48,7 +65,7 @@ export default function FirstPage(props: Props): JSX.Element {
                 .json();
         },
     });
-    const [province, setProvince] = useState<string>('');
+    const [province, setProvince] = useState<string>(props.province_code);
 
     const citiesQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces', province, 'cities'],
@@ -61,7 +78,7 @@ export default function FirstPage(props: Props): JSX.Element {
         },
         enabled: province !== '',
     });
-    const [city, setCity] = useState<string>('');
+    const [city, setCity] = useState<string>(props.city_code);
 
     const districtsQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces', province, 'cities', city, 'districts'],
@@ -74,7 +91,7 @@ export default function FirstPage(props: Props): JSX.Element {
         },
         enabled: city !== '',
     });
-    const [district, setDistrict] = useState<string>('');
+    const [district, setDistrict] = useState<string>(props.district_code);
 
     const subDistrictsQuery = useQuery<AdministrativeData[]>({
         queryKey: [
@@ -95,7 +112,7 @@ export default function FirstPage(props: Props): JSX.Element {
         },
         enabled: district !== '',
     });
-    const [, setSubDistrict] = useState<string>('');
+    const [, setSubDistrict] = useState<string>(props.sub_district_code);
 
     return (
         <AuthenticatedLayout
@@ -111,7 +128,7 @@ export default function FirstPage(props: Props): JSX.Element {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <form>
+                            <form onSubmit={submit}>
                                 <h3>Domicile Address</h3>
 
                                 <div className="mt-4">
@@ -207,6 +224,10 @@ export default function FirstPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.province_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -215,6 +236,11 @@ export default function FirstPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.province_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -239,6 +265,10 @@ export default function FirstPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.city_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -247,6 +277,11 @@ export default function FirstPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.city_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -262,7 +297,7 @@ export default function FirstPage(props: Props): JSX.Element {
                                         onChange={(e) => {
                                             setDistrict(e.target.value);
                                             setData(
-                                                'sub_district_code',
+                                                'district_code',
                                                 e.target.value,
                                             );
                                         }}
@@ -274,6 +309,10 @@ export default function FirstPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.district_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -282,6 +321,11 @@ export default function FirstPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.district_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
                                 <div className="mt-4">
@@ -310,6 +354,10 @@ export default function FirstPage(props: Props): JSX.Element {
                                                     <option
                                                         key={entry.id}
                                                         value={entry.id}
+                                                        selected={
+                                                            props.sub_district_code ===
+                                                            entry.id
+                                                        }
                                                     >
                                                         {entry.name}
                                                     </option>
@@ -319,15 +367,40 @@ export default function FirstPage(props: Props): JSX.Element {
                                             <></>
                                         )}
                                     </select>
+
+                                    <InputError
+                                        message={errors.sub_district_code}
+                                        className="mt-2"
+                                    />
                                 </div>
 
-                                <div className="mt-6">
-                                    <PrimaryButton
-                                        disabled={processing}
-                                        type="submit"
-                                    >
-                                        Submit
-                                    </PrimaryButton>
+                                <div className="mt-6 grid grid-cols-2">
+                                    <div>
+                                        <Link
+                                            href={route(
+                                                'passport.first-page.view',
+                                                {
+                                                    workflow_id:
+                                                        props.workflow_id,
+                                                },
+                                            )}
+                                        >
+                                            <SecondaryButton
+                                                disabled={processing}
+                                                type="button"
+                                            >
+                                                Go Back
+                                            </SecondaryButton>
+                                        </Link>
+                                    </div>
+                                    <div className="ml-auto mr-0">
+                                        <PrimaryButton
+                                            disabled={processing}
+                                            type="submit"
+                                        >
+                                            Submit
+                                        </PrimaryButton>
+                                    </div>
                                 </div>
                             </form>
                         </div>
