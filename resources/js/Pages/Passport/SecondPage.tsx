@@ -16,6 +16,13 @@ type AdministrativeData = {
 
 type Props = {
     workflow_id: string;
+    street_address: string;
+    rt: string;
+    rw: string;
+    sub_district_code: string;
+    district_code: string;
+    city_code: string;
+    province_code: string;
 };
 
 type FormProps = {
@@ -30,13 +37,13 @@ type FormProps = {
 
 export default function SecondPage(props: Props): JSX.Element {
     const { data, setData, post, processing, errors } = useForm<FormProps>({
-        street_address: '',
-        rt: '',
-        rw: '',
-        sub_district_code: '',
-        district_code: '',
-        city_code: '',
-        province_code: '',
+        street_address: props.street_address,
+        rt: props.rt,
+        rw: props.rw,
+        sub_district_code: props.sub_district_code,
+        district_code: props.district_code,
+        city_code: props.city_code,
+        province_code: props.province_code,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -58,7 +65,7 @@ export default function SecondPage(props: Props): JSX.Element {
                 .json();
         },
     });
-    const [province, setProvince] = useState<string>('');
+    const [province, setProvince] = useState<string>(props.province_code);
 
     const citiesQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces', province, 'cities'],
@@ -71,7 +78,7 @@ export default function SecondPage(props: Props): JSX.Element {
         },
         enabled: province !== '',
     });
-    const [city, setCity] = useState<string>('');
+    const [city, setCity] = useState<string>(props.city_code);
 
     const districtsQuery = useQuery<AdministrativeData[]>({
         queryKey: ['provinces', province, 'cities', city, 'districts'],
@@ -84,7 +91,7 @@ export default function SecondPage(props: Props): JSX.Element {
         },
         enabled: city !== '',
     });
-    const [district, setDistrict] = useState<string>('');
+    const [district, setDistrict] = useState<string>(props.district_code);
 
     const subDistrictsQuery = useQuery<AdministrativeData[]>({
         queryKey: [
@@ -105,7 +112,7 @@ export default function SecondPage(props: Props): JSX.Element {
         },
         enabled: district !== '',
     });
-    const [, setSubDistrict] = useState<string>('');
+    const [, setSubDistrict] = useState<string>(props.sub_district_code);
 
     return (
         <AuthenticatedLayout
@@ -217,6 +224,10 @@ export default function SecondPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.province_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -254,6 +265,10 @@ export default function SecondPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.city_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -294,6 +309,10 @@ export default function SecondPage(props: Props): JSX.Element {
                                                 <option
                                                     key={entry.id}
                                                     value={entry.id}
+                                                    selected={
+                                                        props.district_code ===
+                                                        entry.id
+                                                    }
                                                 >
                                                     {entry.name}
                                                 </option>
@@ -335,6 +354,10 @@ export default function SecondPage(props: Props): JSX.Element {
                                                     <option
                                                         key={entry.id}
                                                         value={entry.id}
+                                                        selected={
+                                                            props.sub_district_code ===
+                                                            entry.id
+                                                        }
                                                     >
                                                         {entry.name}
                                                     </option>

@@ -84,8 +84,24 @@ class PassportController extends Controller
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException();
         }
 
+        $input_data = $workflow->getInputData();
+        $street_address = array_key_exists("street_address", $input_data) ? $input_data["street_address"] : null;
+        $rt = array_key_exists("rt", $input_data) ? $input_data["rt"] : null;
+        $rw = array_key_exists("rw", $input_data) ? $input_data["rw"] : null;
+        $sub_district_code = array_key_exists("sub_district_code", $input_data) ? $input_data["sub_district_code"] : null;
+        $district_code = array_key_exists("district_code", $input_data) ? $input_data["district_code"] : null;
+        $city_code = array_key_exists("city_code", $input_data) ? $input_data["city_code"] : null;
+        $province_code = array_key_exists("province_code", $input_data) ? $input_data["province_code"] : null;
+
         return Inertia::render('Passport/SecondPage')
-            ->with("workflow_id", $workflow_id);
+            ->with("workflow_id", $workflow_id)
+            ->with("street_address", $street_address)
+            ->with("rt", $rt)
+            ->with("rw", $rw)
+            ->with("sub_district_code", $sub_district_code)
+            ->with("district_code", $district_code)
+            ->with("city_code", $city_code)
+            ->with("province_code", $province_code);
     }
 
     public function submitSecondPageForm(Request $request, string $workflow_id): RedirectResponse
